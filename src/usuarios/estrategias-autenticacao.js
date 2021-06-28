@@ -7,12 +7,12 @@ const { InvalidArgumentError } = require('../erros')
 
 function verificaUsuario(usuario){
     if(!usuario){
-        throw InvalidArgumentError('Email ou Senha estão incorretos')
+        throw new InvalidArgumentError('Email ou Senha estão incorretos')
     }
 }
 
-function verificaSenha(senha, senhaHash){
-    const senhaValida = bcrypt.compare(senha, senhaHash)
+async function verificaSenha(senha, senhaHash){
+    const senhaValida = await bcrypt.compare(senha, senhaHash)
 
     if(!senhaValida){
         throw new InvalidArgumentError("Email ou senha estão incorretos")
@@ -24,11 +24,11 @@ passport.use(
         usernameField: 'email',
         passwordField: 'senha',
         session: false
-    }, (email, senha, done) => {
+    }, async (email, senha, done) => {
         try{
             const usuario = await Usuario.buscaPorEmail(email)
             verificaUsuario(usuario)
-            verificaSenha(senha, usuario.senhaHash)
+            await verificaSenha(senha, usuario.senhaHash)
 
             done(null, usuario);
         } catch(error){
