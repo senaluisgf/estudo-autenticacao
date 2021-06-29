@@ -1,9 +1,9 @@
 const postsControlador = require('./posts-controlador');
-const { bearer } = require('../usuarios/middlewares-autenticacao');
+const { middlewaresAutenticacao } = require('../usuarios');
 
 module.exports = app => {
   app
     .route('/post')
     .get(postsControlador.lista)
-    .post(bearer,postsControlador.adiciona);
+    .post(middlewaresAutenticacao.bearer,postsControlador.adiciona);
 };
