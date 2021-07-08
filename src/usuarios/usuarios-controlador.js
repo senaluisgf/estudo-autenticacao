@@ -4,6 +4,7 @@ const blacklist = require('../../redis/manipula-blacklist')
 
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
+const moment = require('moment')
 
 function criaTokenJWT(usuario){
   const payload = {
@@ -14,8 +15,10 @@ function criaTokenJWT(usuario){
   return token
 }
 
-function criaTokenOpaco(){
+function criaTokenOpaco(usuario){
   const tokenOpaco = crypto.randomBytes(24).toString('hex')
+  const dataExpiracao = moment().add(5, 'days').unix()
+  
   return tokenOpaco
 }
 
