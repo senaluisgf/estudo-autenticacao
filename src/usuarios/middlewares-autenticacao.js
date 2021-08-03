@@ -76,7 +76,7 @@ module.exports ={
             req.user = await Usuario.buscaPorId(id)
             return next()
         } catch(erro){
-            if(error.name === "InvalidArgumentError"){
+            if(erro.name === "InvalidArgumentError"){
                 return res.status(401).json({erro: erro.message})
             }
 
