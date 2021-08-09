@@ -41,6 +41,14 @@ async function verificaRefreshToken(token, nome, allowlist){
     return id
 }
 
+async function invalidaAccessToken(token, blocklist){
+    await blocklist.adiciona(token)
+}
+
+async function invalidaRefreshToken(token, allowlist){
+    await allowlist.deletaValor(token)
+}
+
 module.exports = {
     access: {
         lista: blocklistAccessToken,
@@ -54,6 +62,9 @@ module.exports = {
             await verificaAccessToken(token, this.nome, this.lista)
             const { id } = jwt.verify(token, process.env.CHAVE_JWT)
             return id
+        },
+        async invalida(token){
+            return await invalidaAccessToken(token, this.lista)
         }
     },
     refresh: {
@@ -66,6 +77,9 @@ module.exports = {
         },
         async verifica(token){
             return await verificaRefreshToken(token, this.nome, this.lista)
+        },
+        async invalida(token){
+            return await invalidaRefreshToken(token, this.lista)
         }
     },
 }
