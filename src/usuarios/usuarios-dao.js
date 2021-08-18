@@ -81,6 +81,21 @@ module.exports = {
     });
   },
 
+  modificaEmailVerificado: (usuario, emailVerificado) => {
+    return new Promise((resolve, reject) => {
+      db.run(
+        'UPDATE usuarios SET emailVerificado = ? WHERE id = ?',
+        [emailVerificado, usuario.id],
+        erro => {
+          if (erro) {
+            return reject('Erro ao modificar o emailVerificado do usuário');
+          }
+          return resolve();
+        }
+      )
+    })
+  },
+
   deleta: usuario => {
     return new Promise((resolve, reject) => {
       db.run(

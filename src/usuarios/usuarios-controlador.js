@@ -24,7 +24,7 @@ module.exports = {
       await usuario.adicionaSenha(senha)
       await usuario.adiciona();
 
-      const endereco = geraEndereco('/usuarios/verifica-email/', usuario.id)
+      const endereco = geraEndereco('/usuario/verifica-email/', usuario.id)
       const emailVerificacao = new EmailVerificacao(usuario, endereco)
       emailVerificacao.enviaEmail()
 
@@ -60,6 +60,16 @@ module.exports = {
   lista: async (req, res) => {
     const usuarios = await Usuario.lista();
     res.json(usuarios);
+  },
+
+  verificaEmail: async (req, res) => {
+    try{
+      const usuario = await Usuario.buscaPorId(req.params.id)
+      await usuario.verificaEmail()
+      res.status(200).json()
+    } catch(error){
+      res.status(500).json({error})
+    }
   },
 
   deleta: async (req, res) => {
