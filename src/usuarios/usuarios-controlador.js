@@ -23,8 +23,10 @@ module.exports = {
 
       await usuario.adicionaSenha(senha)
       await usuario.adiciona();
+      
+      const emailValidationToken = await tokens.verificacaoEmail.cria(usuario.id)
 
-      const endereco = geraEndereco('/usuario/verifica-email/', usuario.id)
+      const endereco = geraEndereco('/usuario/verifica-email/', emailValidationToken)
       const emailVerificacao = new EmailVerificacao(usuario, endereco)
       emailVerificacao.enviaEmail()
 

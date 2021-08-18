@@ -20,7 +20,7 @@ module.exports = app => {
     .get(usuariosControlador.lista);
 
   app
-    .route('/usuario/verifica-email/:id')
+    .route('/usuario/verifica-email/:token')
     .get(
       middlewaresAutenticacao.verificacaoEmail,
       usuariosControlador.verificaEmail

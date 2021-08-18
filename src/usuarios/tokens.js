@@ -11,7 +11,7 @@ function criaTokenJWT(id, [tempoQuantidade, tempoUnidade]){
         payload,
         process.env.CHAVE_JWT,
         { expiresIn: tempoQuantidade+tempoUnidade }
-        )
+    )
     return token
 }
   
@@ -81,5 +81,17 @@ module.exports = {
         async invalida(token){
             return await invalidaRefreshToken(token, this.lista)
         }
+    },
+    verificacaoEmail: {
+        tempoExpiracao: [1, 'h'],
+        nome: 'email validation token',
+        async cria(id){
+            const emailValidationToken = criaTokenJWT(id, this.tempoExpiracao)
+            return emailValidationToken;
+        },
+        async verifica(token){
+            const { id } = jwt.verify(token, process.env. CHAVE_JWT)
+            return id
+        },
     },
 }
