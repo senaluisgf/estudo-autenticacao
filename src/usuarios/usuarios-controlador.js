@@ -4,6 +4,12 @@ const { InvalidArgumentError, InternalServerError } = require('../erros');
 const tokens = require('./tokens');
 const { EmailVerificacao } = require('./emails')
 
+function geraEndereco(rota, id){
+  const baseURL = process.env.BASE_URL
+  const endereco = `${baseURL}${rota}${id}`
+  return endereco
+}
+
 module.exports = {
   adiciona: async (req, res) => {
     const { nome, email, senha } = req.body;
@@ -17,7 +23,7 @@ module.exports = {
       await usuario.adicionaSenha(senha)
       await usuario.adiciona();
 
-      const endereco = `http://localhost:3000/usuarios/${usuario.id}`
+      const endereco = geraEndereco('/usuarios/verifica-email/', usuario.id)
       const emailVerificacao = new EmailVerificacao(usuario, endereco)
       emailVerificacao.enviaEmail()
 
