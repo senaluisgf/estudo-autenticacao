@@ -5,13 +5,24 @@ const moment = require('moment')
 const blocklistAccessToken = require('../../redis/blocklist-access-token')
 const {InvalidArgumentError} = require('../erros')
 
-function criaTokenJWT(id, [tempoQuantidade, tempoUnidade]){
+function criaTokenJWT(id, tempoExpiracao){
     const payload = { id }
-    const token = jwt.sign(
-        payload,
-        process.env.CHAVE_JWT,
-        { expiresIn: tempoQuantidade+tempoUnidade }
-    )
+    let token
+    if(tempoExpiracao){
+        const [tempoQuantidade, tempoUnidade] = tempoExpiracao
+
+        token = jwt.sign(
+            payload,
+            process.env.CHAVE_JWT,
+            { expiresIn: tempoQuantidade+tempoUnidade }
+        )
+    } else {
+        token = jwt.sign(
+            payload,
+            process.env.CHAVE_JWT
+        )
+    }
+    
     return token
 }
   
