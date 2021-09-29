@@ -6,7 +6,11 @@ module.exports = app => {
   app
     .route('/post')
     .get(
-      [middlewaresAutenticacao.bearer, autorizacao(['assinante', 'editor', 'admin'])],
-      postsControlador.lista)
-    .post(middlewaresAutenticacao.bearer,postsControlador.adiciona);
+      [middlewaresAutenticacao.bearer, autorizacao('post', 'ler')],
+      postsControlador.lista
+    )
+    .post(
+      [middlewaresAutenticacao.bearer, autorizacao('post', 'criar')],
+      postsControlador.adiciona
+    );
 };
