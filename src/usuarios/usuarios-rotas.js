@@ -26,5 +26,7 @@ module.exports = app => {
       usuariosControlador.verificaEmail
     )
 
-  app.route('/usuario/:id').delete(middlewaresAutenticacao.bearer, usuariosControlador.deleta);
+  app
+    .route('/usuario/:id')
+    .delete(middlewaresAutenticacao.bearer, usuariosControlador.deleta);
 };
