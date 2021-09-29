@@ -5,6 +5,7 @@ class Post {
   constructor(post) {
     this.titulo = post.titulo;
     this.conteudo = post.conteudo;
+    this.autor = post.autor
     this.valida();
   }
 

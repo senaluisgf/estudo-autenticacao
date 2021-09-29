@@ -7,10 +7,11 @@ module.exports = {
         `
         INSERT INTO posts (
           titulo, 
-          conteudo
-        ) VALUES (?, ?)
+          conteudo,
+          autor
+        ) VALUES (?, ?, ?)
       `,
-        [post.titulo, post.conteudo],
+        [post.titulo, post.conteudo, post.autor],
         erro => {
           if (erro) {
             return reject('Erro ao adicionar o post!');
