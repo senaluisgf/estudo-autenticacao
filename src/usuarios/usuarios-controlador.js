@@ -12,13 +12,14 @@ function geraEndereco(rota, id){
 
 module.exports = {
   adiciona: async (req, res) => {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha, cargo } = req.body;
 
     try {
       const usuario = new Usuario({
         nome,
         email,
-        emailVerificado: false
+        emailVerificado: false,
+        cargo,
       });
 
       await usuario.adicionaSenha(senha)
