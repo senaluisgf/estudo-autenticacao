@@ -43,7 +43,7 @@ passport.use(
     new BearerStrategy(
         async (token, done) => {
             try{
-                const id = tokens.access.verifica(token)
+                const id = await tokens.access.verifica(token)
                 const usuario = await Usuario.buscaPorId(id)
                 done(null, usuario, {token})
             }catch(error){
