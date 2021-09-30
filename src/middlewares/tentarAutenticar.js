@@ -1,4 +1,4 @@
-const { middlewaresAutenticacao } = require("../usuarios")
+const middlewaresAutenticacao = require('../usuarios/middlewares-autenticacao')
 
 module.exports = (req, res, next) => {
     if(req.get('Authorization')){
