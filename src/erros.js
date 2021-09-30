@@ -12,7 +12,16 @@ class InternalServerError extends Error {
   }
 }
 
+class NaoEncontrado extends Error{
+  constructor(entidade){
+    const mensagem = `Não foi possível localizar ${entidade}`
+    super(mensagem)
+    this.name = "NaoEncontrado"
+  }
+}
+
 module.exports = {
   InvalidArgumentError: InvalidArgumentError,
-  InternalServerError: InternalServerError
+  InternalServerError: InternalServerError,
+  NaoEncontrado: NaoEncontrado
 };

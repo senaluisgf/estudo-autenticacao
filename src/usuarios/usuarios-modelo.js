@@ -1,6 +1,7 @@
 const usuariosDao = require('./usuarios-dao');
 const { InvalidArgumentError } = require('../erros');
 const validacoes = require('../validacoes-comuns');
+const { NaoEncontrado } = require('../erros')
 
 const bcrypt = require('bcrypt')
 
@@ -52,7 +53,7 @@ class Usuario {
   static async buscaPorId(id) {
     const usuario = await usuariosDao.buscaPorId(id);
     if (!usuario) {
-      return null;
+      throw new NaoEncontrado('usuario');
     }
     
     return new Usuario(usuario);
