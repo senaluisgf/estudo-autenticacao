@@ -1,5 +1,5 @@
 const { JsonWebTokenError, TokenExpiredError } = require('jsonwebtoken')
-const {InvalidArgumentError, InternalServerError, NaoEncontrado} = require('../erros')
+const {InvalidArgumentError, InternalServerError, NaoEncontrado, NaoAutorizado} = require('../erros')
 
 module.exports = (erro, req, res, next) => {
     let statusCode = 500
@@ -11,6 +11,7 @@ module.exports = (erro, req, res, next) => {
     if(erro instanceof InternalServerError) statusCode = 500
     if(erro instanceof JsonWebTokenError) statusCode = 401
     if(erro instanceof NaoEncontrado) statusCode = 404
+    if(erro instanceof NaoAutorizado) statusCode = 401
     
     if(erro instanceof TokenExpiredError){
         statusCode = 401

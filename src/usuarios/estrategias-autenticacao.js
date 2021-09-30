@@ -5,11 +5,12 @@ const bcrypt = require('bcrypt')
 const tokens = require('./tokens')
 
 const Usuario = require('./usuarios-modelo')
-const { InvalidArgumentError } = require('../erros')
+const usuariosDao = require('./usuarios-dao')
+const { InvalidArgumentError, NaoAutorizado } = require('../erros')
 
 function verificaUsuario(usuario){
     if(!usuario){
-        throw new InvalidArgumentError('Email ou Senha estão incorretos')
+        throw new NaoAutorizado()
     }
 }
 
@@ -17,7 +18,7 @@ async function verificaSenha(senha, senhaHash){
     const senhaValida = await bcrypt.compare(senha, senhaHash)
 
     if(!senhaValida){
-        throw new InvalidArgumentError("Email ou senha estão incorretos")
+        throw new NaoAutorizado()
     }
 }
 
@@ -28,7 +29,7 @@ passport.use(
         session: false
     }, async (email, senha, done) => {
         try{
-            const usuario = await Usuario.buscaPorEmail(email)
+            const usuario = await usuariosDao.buscaPorEmail(email)
             verificaUsuario(usuario)
             await verificaSenha(senha, usuario.senhaHash)
 
