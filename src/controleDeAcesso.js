@@ -2,7 +2,7 @@ const AccessControl = require('accesscontrol')
 const controle = new AccessControl()
 
 controle.grant('assinante')
-    .readAny('post', ['titulo', 'autor'])
+    .readAny('post')
 
 controle.grant('editor')
     .extend('assinante')
