@@ -1,10 +1,4 @@
-class ConversorDePost{
-    constructor(tipoDeConteudo, camposExtras = []){
-        this.tipoDeConteudo = tipoDeConteudo
-        this.camposPublicos = ['titulo', 'conteudo']
-        this.camposPublicos = this.camposPublicos.concat(camposExtras)
-    }
-
+class Conversor {
     converter(dados){
         if(this.camposPublicos.indexOf('*') === -1) dados = this.filtrar(dados)
 
@@ -37,4 +31,22 @@ class ConversorDePost{
     }
 }
 
-module.exports =  ConversorDePost
+class ConversorDePost extends Conversor{
+    constructor(tipoDeConteudo, camposExtras = []){
+        super()
+        this.tipoDeConteudo = tipoDeConteudo
+        this.camposPublicos = ['titulo', 'conteudo']
+        this.camposPublicos = this.camposPublicos.concat(camposExtras)
+    }
+}
+
+class ConversorDeUsuario extends Conversor{
+    constructor(tipoDeConteudo, camposExtras = []){
+        super()
+        this.tipoDeConteudo = tipoDeConteudo
+        this.camposPublicos = ['nome']
+        this.camposPublicos = this.camposPublicos.concat(camposExtras)
+    }
+}
+
+module.exports =  { ConversorDePost, ConversorDeUsuario }
