@@ -1,6 +1,5 @@
 const Post = require('./posts-modelo');
-const { InvalidArgumentError, InternalServerError } = require('../erros');
-const ConversorDePost = require('../conversores');
+const {ConversorDePost} = require('../conversores');
 
 module.exports = {
   adiciona: async (req, res, next) => {
