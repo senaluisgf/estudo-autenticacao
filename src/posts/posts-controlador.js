@@ -3,24 +3,18 @@ const { InvalidArgumentError, InternalServerError } = require('../erros');
 const ConversorDePost = require('../conversores');
 
 module.exports = {
-  adiciona: async (req, res) => {
+  adiciona: async (req, res, next) => {
     try {
       const post = new Post(req.body);
       await post.adiciona();
       
       res.status(201).send(post);
     } catch (erro) {
-      if (erro instanceof InvalidArgumentError) {
-        res.status(422).json({ erro: erro.message });
-      } else if (erro instanceof InternalServerError) {
-        res.status(500).json({ erro: erro.message });
-      } else {
-        res.status(500).json({ erro: erro.message });
-      }
+      next(erro)
     }
   },
 
-  lista: async (req, res) => {
+  lista: async (req, res, next) => {
     try {
       let posts = await Post.lista();
       const camposExtras = req.acesso?.todos.permitido
@@ -39,7 +33,7 @@ module.exports = {
 
       res.send(conversor.converter(posts));
     } catch (erro) {
-      return res.status(500).json({ erro: erro });
+      next(erro)
     }
   }
 };

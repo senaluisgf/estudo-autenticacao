@@ -11,7 +11,7 @@ function geraEndereco(rota, id){
 }
 
 module.exports = {
-  adiciona: async (req, res) => {
+  adiciona: async (req, res, next) => {
     const { nome, email, senha, cargo } = req.body;
 
     try {
@@ -33,13 +33,7 @@ module.exports = {
 
       res.status(201).json();
     } catch (erro) {
-      if (erro instanceof InvalidArgumentError) {
-        res.status(422).json({ erro: erro.message });
-      } else if (erro instanceof InternalServerError) {
-        res.status(500).json({ erro: erro.message });
-      } else {
-        res.status(500).json({ erro: erro.message });
-      }
+      next(erro)
     }
   },
   
@@ -50,13 +44,13 @@ module.exports = {
     res.status(200).json({ refreshToken })
   },
   
-  logout: async (req, res) => {
+  logout: async (req, res, next) => {
     try{
       const token = req.token
       await tokens.access.invalida(token)
       res.status(204).send()
     } catch(erro){
-      res.status(500).json({erro: erro.message})
+      next(erro)
     }
   },
 
@@ -65,23 +59,23 @@ module.exports = {
     res.json(usuarios);
   },
 
-  verificaEmail: async (req, res) => {
+  verificaEmail: async (req, res, next) => {
     try{
       const usuario = req.user
       await usuario.verificaEmail()
       res.status(200).json()
-    } catch(error){
-      res.status(500).json({error})
+    } catch(erro){
+      next(erro)
     }
   },
 
-  deleta: async (req, res) => {
+  deleta: async (req, res, next) => {
     const usuario = await Usuario.buscaPorId(req.params.id);
     try {
       await usuario.deleta();
       res.status(200).send();
     } catch (erro) {
-      res.status(500).json({ erro: erro });
+      next(erro)
     }
   }
 };
