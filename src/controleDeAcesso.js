@@ -6,6 +6,7 @@ controle.grant('assinante')
 
 controle.grant('editor')
     .extend('assinante')
+    .readAny('usuario', ['nome'])
     .createOwn('post')
     .deleteOwn('post')
 
