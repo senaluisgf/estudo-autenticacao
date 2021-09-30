@@ -76,8 +76,8 @@ module.exports = {
   },
 
   deleta: async (req, res, next) => {
-    const usuario = await Usuario.buscaPorId(req.params.id);
     try {
+      const usuario = await Usuario.buscaPorId(req.params.id);
       await usuario.deleta();
       res.status(200).send();
     } catch (erro) {
