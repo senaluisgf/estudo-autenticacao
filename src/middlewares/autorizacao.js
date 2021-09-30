@@ -23,6 +23,7 @@ module.exports = (entidade, acao) => (requisicao, resposta, proximo) => {
 
     if(!permissoesTodos.granted && !permissoesApenasSeu.granted){
         resposta.status(403).json({mensagem:'Acesso Negado'}).end()
+        return
     }
     
     requisicao.acesso = {
