@@ -2,6 +2,7 @@ const usuariosControlador = require('./usuarios-controlador');
 const middlewaresAutenticacao = require('./middlewares-autenticacao')
 const tentarAutenticar = require('../middlewares/tentarAutenticar')
 const tentarAutorizar = require('../middlewares/tentarAutorizar');
+const autorizacao = require('../middlewares/autorizacao');
 
 module.exports = app => {
   app.route('/usuario/atualiza_token')
@@ -32,5 +33,7 @@ module.exports = app => {
 
   app
     .route('/usuario/:id')
-    .delete(middlewaresAutenticacao.bearer, usuariosControlador.deleta);
+    .delete(
+      [middlewaresAutenticacao.bearer, middlewaresAutenticacao.local, autorizacao('usuario', 'remover')],
+      usuariosControlador.deleta);
 };
