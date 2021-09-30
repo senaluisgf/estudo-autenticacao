@@ -2,7 +2,8 @@ const Usuario = require('./usuarios-modelo');
 const { InvalidArgumentError, InternalServerError } = require('../erros');
 
 const tokens = require('./tokens');
-const { EmailVerificacao } = require('./emails')
+const { EmailVerificacao } = require('./emails');
+const { ConversorDeUsuario } = require('../conversores');
 
 function geraEndereco(rota, id){
   const baseURL = process.env.BASE_URL
@@ -56,7 +57,12 @@ module.exports = {
 
   lista: async (req, res) => {
     const usuarios = await Usuario.lista();
-    res.json(usuarios);
+    const camposExtras = req.acesso?.todos.permitido
+      ? req.acesso.todos.atributos
+      : req.acesso?.apenasSeu.atributos
+
+    const conversor = new ConversorDeUsuario('json', camposExtras)
+    res.send(conversor.converter(usuarios));
   },
 
   verificaEmail: async (req, res, next) => {

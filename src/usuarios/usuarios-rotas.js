@@ -1,5 +1,7 @@
 const usuariosControlador = require('./usuarios-controlador');
 const middlewaresAutenticacao = require('./middlewares-autenticacao')
+const tentarAutenticar = require('../middlewares/tentarAutenticar')
+const tentarAutorizar = require('../middlewares/tentarAutorizar');
 
 module.exports = app => {
   app.route('/usuario/atualiza_token')
@@ -17,7 +19,9 @@ module.exports = app => {
   app
     .route('/usuario')
     .post(usuariosControlador.adiciona)
-    .get(usuariosControlador.lista);
+    .get(
+      [tentarAutenticar, tentarAutorizar('usuario', 'ler')],
+      usuariosControlador.lista);
 
   app
     .route('/usuario/verifica-email/:token')
