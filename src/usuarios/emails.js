@@ -49,8 +49,19 @@ class EmailVerificacao extends Email{
     }
 }
 
+class EmailRedefinicao extends Email{
+    constructor(usuario){
+        super()
+        this.from = '"Blog do Cógido" <noreply@blogdocodigo.com.br>'
+        this.to = usuario.email
+        this.subject = 'Redefinição de senha'
+        this.text = `Olá! você solicitou redefinição de senha`
+        this.html = `<h1>Olá!</h1> você solicitou redefinição de senha`
+    }
+}
 
 module.exports = {
     Email,
-    EmailVerificacao
+    EmailVerificacao,
+    EmailRedefinicao
 }
