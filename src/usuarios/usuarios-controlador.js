@@ -94,8 +94,9 @@ module.exports = {
       if(!email) throw new InvalidArgumentError("campo email é obrigatório")
 
       const usuario = await buscaPorEmail(email)
-
-      const emailRedefinicao = new EmailRedefinicao(usuario)
+      
+      const token = await tokens.redefinicaoSenha.cria(usuario.id)
+      const emailRedefinicao = new EmailRedefinicao(usuario, token)
       emailRedefinicao.enviaEmail()
 
       res.status(201).json(respostaPadrao)
@@ -107,5 +108,9 @@ module.exports = {
       }
       next(erro)
     }
+  },
+
+  redefinirSenha: async (req, res, next) => {
+    res.json({mensagem: 'parabens'})
   }
 };
