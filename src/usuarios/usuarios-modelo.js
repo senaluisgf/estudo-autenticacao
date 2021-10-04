@@ -76,6 +76,10 @@ class Usuario {
     const custoHash = 12
     return bcrypt.hash(senha, custoHash)
   }
+
+  async redefinirSenha(){
+    await usuariosDao.redefinirSenha(this)
+  }
 }
 
 module.exports = Usuario;

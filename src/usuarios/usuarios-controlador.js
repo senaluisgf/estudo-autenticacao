@@ -4,7 +4,7 @@ const { InvalidArgumentError, NaoEncontrado } = require('../erros');
 const tokens = require('./tokens');
 const { EmailVerificacao, EmailRedefinicao } = require('./emails');
 const { ConversorDeUsuario } = require('../conversores');
-const { buscaPorEmail } = require('./usuarios-modelo');
+const { buscaPorEmail, buscaPorId } = require('./usuarios-modelo');
 
 function geraEndereco(rota, id){
   const baseURL = process.env.BASE_URL
@@ -111,6 +111,27 @@ module.exports = {
   },
 
   redefinirSenha: async (req, res, next) => {
-    res.json({mensagem: 'parabens'})
+    try {
+      const { token, senha, confirmar } = req.body
+
+      if(!token) throw new InvalidArgumentError('Token must be provided!')
+      if(!senha) throw new InvalidArgumentError('Senha must be provided!')
+      if(!confirmar) throw new InvalidArgumentError('Confirmar must be provided!')
+      if(senha !== confirmar) throw new InvalidArgumentError("Senha and Confirmar must be equals")
+
+      const id = await tokens.redefinicaoSenha.verifica(token)
+      const usuario = await buscaPorId(id)
+
+      await usuario.adicionaSenha(senha)
+
+      await usuario.redefinirSenha()
+
+      await tokens.redefinicaoSenha.invalida(token)
+
+      res.status(201).json()
+
+    }catch(erro){
+      next(erro)
+    }
   }
 };

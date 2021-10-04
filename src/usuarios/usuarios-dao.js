@@ -113,5 +113,20 @@ module.exports = {
         }
       );
     });
+  },
+
+  redefinirSenha: (usuario) => {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE usuarios SET senhaHash = ? WHERE id = ?`,
+        [usuario.senhaHash, usuario.id],
+        erro => {
+          if(erro){
+            return reject("Erro ao alterar senha do usuário")
+          }
+          return resolve()
+        }
+      )
+    })
   }
 };
