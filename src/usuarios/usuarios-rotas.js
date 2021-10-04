@@ -17,6 +17,9 @@ module.exports = app => {
       usuariosControlador.logout
     )
 
+  app.route('/usuario/esqueci-minha-senha')
+    .post(usuariosControlador.esqueciMinhaSenha)
+
   app
     .route('/usuario')
     .post(usuariosControlador.adiciona)

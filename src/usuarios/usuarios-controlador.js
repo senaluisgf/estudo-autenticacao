@@ -1,9 +1,10 @@
 const Usuario = require('./usuarios-modelo');
-const { InvalidArgumentError, InternalServerError } = require('../erros');
+const { InvalidArgumentError, NaoEncontrado } = require('../erros');
 
 const tokens = require('./tokens');
-const { EmailVerificacao } = require('./emails');
+const { EmailVerificacao, EmailRedefinicao } = require('./emails');
 const { ConversorDeUsuario } = require('../conversores');
+const { buscaPorEmail } = require('./usuarios-modelo');
 
 function geraEndereco(rota, id){
   const baseURL = process.env.BASE_URL
@@ -81,6 +82,29 @@ module.exports = {
       await usuario.deleta();
       res.status(200).send();
     } catch (erro) {
+      next(erro)
+    }
+  },
+
+  esqueciMinhaSenha: async (req, res, next) => {
+    const respostaPadrao = { mensagem: 'Assim que localizarmos o email enviaremos instruções para redefinição de senha'}
+    try{
+      const { email } = req.body
+
+      if(!email) throw new InvalidArgumentError("campo email é obrigatório")
+
+      const usuario = await buscaPorEmail(email)
+
+      const emailRedefinicao = new EmailRedefinicao(usuario)
+      emailRedefinicao.enviaEmail()
+
+      res.status(201).json(respostaPadrao)
+    } catch(erro){
+      console.log(erro)
+      if(erro instanceof NaoEncontrado){
+        res.json(respostaPadrao)
+        return
+      }
       next(erro)
     }
   }
